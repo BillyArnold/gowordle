@@ -26,23 +26,31 @@ func main () {
 	for i := 1; i < guessTotal + 1; i++ {
 		attemptResult := guessAttempt(selectedWord)
 
-		if (attemptResult == false) {
-			fmt.Println("\nIncorrect Guess")
-		} else {
+		if (attemptResult == true) {
 			c := color.New(color.FgGreen).Add(color.Underline)
 			c.Println("\nCorrect!")
+			gameResult = true
+			break
 		}
 		
 	}
 
-	if (gameResult == false) {
-		c := color.New(color.FgRed).Add(color.Underline)
-		c.Println("\nOut of guesses, You lose!")
+	if (gameResult == true) {
+		c := color.New(color.FgGreen).Add(color.Underline)
+		c.Println("\nYou Win!")
+		return
 	}
+		
+	c := color.New(color.FgRed).Add(color.Underline)
+	c.Println("\nOut of guesses, You lose!")
+	c.Printf("The word was : %s\n", selectedWord)
+	return
+	
 }
 
 func setRules () (int, int) {
-	fmt.Println("Welcome to wordle cli");
+	c := color.New(color.FgGreen).Add(color.Underline)
+	c.Println("Welcome to wordle cli")
 
 	lettersInput := intInput("Select a number of letters: ", 5)
 	guessesInput := intInput("Select a number of guesses to allow: ", 5);
@@ -69,16 +77,26 @@ func guessAttempt (wordToGuess string) bool {
 		return false;
 	}
 
-	for i := 1; i < len(finalWordLetters); i++ {
+	correctLetters := 0
 
+	for i := 0; i < len(finalWordLetters); i++ {
+		if (finalWordLetters[i] == guessLetters[i]) {
+			c := color.New(color.FgGreen).Add(color.Underline)
+			c.Print(guessLetters[i])
+			correctLetters++
+		} else if (Contains(finalWordLetters, guessLetters[i])) {
+			c := color.New(color.FgYellow).Add(color.Underline)
+			c.Print(guessLetters[i])
+		} else {
+			c := color.New(color.FgRed).Add(color.Underline)
+			c.Print(guessLetters[i])
+		}
 	}
-
-	//loop through letters
-
-	// return letter in correct colour
-	fmt.Printf("Your guess is %s", guess);
-
+	fmt.Printf("\n");
 	//if all letters are correct, return true, else return false;
+	if(correctLetters == len(finalWordLetters)) {
+		return true;
+	}
 	return false
 }
 
@@ -127,4 +145,13 @@ func getWordsByLength(wordLength int) []string {
     }
 
 	return wordsWithLength
+}
+
+func Contains(a []string, x string) bool {
+	for _, n := range a {
+			if x == n {
+					return true
+			}
+	}
+	return false
 }
