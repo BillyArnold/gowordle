@@ -19,8 +19,6 @@ func main () {
 	rand.Seed(time.Now().Unix()) // initialize global pseudo random generator
 	selectedWord := possibleWords[rand.Intn(len(possibleWords))]
 
-	fmt.Printf("Selected word is : %s\n", selectedWord)
-
 	gameResult := false
 
 	for i := 1; i < guessTotal + 1; i++ {
